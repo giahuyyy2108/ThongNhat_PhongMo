@@ -1,0 +1,103 @@
+﻿@{
+    Layout = "_PhongMoView";
+}
+
+<table class="table table-bordered table-striped" id="table1" style="max-width:100%;height:auto;">
+    <thead style="background-color: #1261b0;color: #fff;">
+        <tr>
+            <th>
+                Bệnh nhân
+            </th>
+            <th>
+                Phòng mổ
+            </th>
+
+        </tr>
+    </thead>
+
+</table>
+
+@section Scripts {
+    <script>
+
+        var minDate, maxDate;
+
+        var recentPlatformTable;
+        var api;
+        var curRow = 0;
+        var timer;
+
+        $(document).ready(function () {
+            // Custom filtering function which will search data in column four between two values
+            
+
+
+     
+
+
+
+            recentPlatformTable = $('#table1')
+                .on('xhr.dt', function (e, settings, json, xhr) {
+                    curRow = 0;
+                    setTimer();
+                })
+                .DataTable(
+                    {
+                        "ajax": {
+                            "url": "/PhongMo/GetListPhong",
+                            "type": "GET",
+                            "datatype": "json"
+                        },
+                        "columns": [
+                            { "data": "hoten" },
+                            { "data": "phongban.name" },
+                        ],
+
+                        responsive: true,
+                        bPaginate: true,
+                        "scrollY": "250px",
+                        "scrollCollapse": false,
+                        scroller: true,
+                        "footerCallback": function (row, data, start, end, display) {
+                            api = this.api();
+                        },
+                    });
+
+            //$('#min, #max').on('change', function () {
+            //    table.draw();
+            //});
+
+            //setInterval(function () {
+            //    $('#table1').DataTable().ajax.reload(null, false);
+            //}, 5000);
+
+            function setTimer() {
+                if (timer) {
+                    clearInterval(timer);
+                }
+
+                timer = setInterval(function () {
+                    if (api === undefined)
+                        return;
+
+                    var num_rows = api.page.info().recordsTotal;
+                    curRow += 1;
+                    //console.log("*****row " + curRow + " of " + num_rows);
+
+                    if (curRow > num_rows) {
+                        //console.log("*****Reloading");
+                        clearInterval(timer);
+                        $('#table1').DataTable().ajax.reload();
+                    }
+                    else {
+                        api.settings().scroller().scrollToRow(curRow, 1000);
+
+                        // removed due to issues with JS BIN
+                        //console.log(api.rows({ page: 'current' }).data());
+                    }
+                }, 3000);
+            }
+
+        });
+    </script>
+}

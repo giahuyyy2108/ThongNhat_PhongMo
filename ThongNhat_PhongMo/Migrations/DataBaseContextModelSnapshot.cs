@@ -172,9 +172,10 @@ namespace ThongNhat_PhongMo.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("hoten")
-                        .HasColumnType("nvarchar");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("id_phongban")
+                    b.Property<int>("id_phongban")
                         .HasColumnType("int");
 
                     b.Property<int>("id_tinhtrang")
@@ -269,9 +270,6 @@ namespace ThongNhat_PhongMo.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("id_phongban")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -340,7 +338,9 @@ namespace ThongNhat_PhongMo.Migrations
                 {
                     b.HasOne("ThongNhat_PhongMo.Models.PhongBan", "phongban")
                         .WithMany("thongTinKhamBenh")
-                        .HasForeignKey("id_phongban");
+                        .HasForeignKey("id_phongban")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tintrang")
                         .WithMany("benhnhan")

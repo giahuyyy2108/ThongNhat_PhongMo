@@ -10,6 +10,7 @@ namespace ThongNhat_PhongMo.Models
         public string id { get; set; }
 
         [Column(TypeName ="nvarchar")]
+        [StringLength(100)]
         public string hoten { get; set; }
 
         [StringLength(7)]
@@ -27,7 +28,7 @@ namespace ThongNhat_PhongMo.Models
         public PhongBan phongban { get; set; }
 
         [ForeignKey("id_tinhtrang")]
-        public TinhTrang tintrang { get; set; }
+        public TinhTrang tinhtrang { get; set; }
 
 
         [ForeignKey("id_user")]
