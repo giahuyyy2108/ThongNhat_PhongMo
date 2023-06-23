@@ -1,30 +1,28 @@
-﻿@{
-	ViewData["Title"] = "Phong";
-	Layout = "~/Views/Shared/_phongmo.cshtml";
+﻿@model ThongNhat_PhongMo.Models.PhongViewModel
+
+@{
+    ViewData["Title"] = "Phong";
+    Layout = "~/Views/Shared/_phongmo.cshtml";
 }
-	<div class="row" style="margin: 30px 0 30px 0">
+<div class="row" style="margin: 30px 0 30px 0">
         <div class="col-sm-5 ">
             <img src="/images/bvtn_logo.png" alt="logo" style="width:530px" class="logo" />
         </div>
         <div class="col-sm-7">
-			<h1> DANH SÁCH HIỆN TRẠNG BỆNH NHÂN </h1>
-			<div id="clock"></div>
+		<h1> DANH SÁCH HIỆN TRẠNG BỆNH NHÂN TẠI PHÒNG @Model.idPhong </h1>
         </div>
-
-    </div>
-<table class="table1" id="table1">
-	<thead>
-		<tr>
-			<th>TÊN BỆNH NHÂN</th>
-			<th>GIỚI TÍNH</th>
-			<th> NĂM SINH</th>
-			<th>PHÒNG</th>
-			<th>THỜI GIAN</th>
-			<th>TRẠNG THÁI</th>
-		</tr>
-	</thead>
-</table>
-
+</div>
+     <table class="table1" id="table1">
+            <thead>
+                <tr>
+                    <th>TÊN BỆNH NHÂN</th>
+                    <th>GIỚI TÍNH</th>
+					<th> NĂM SINH</th>
+					<th> THỜI GIAN DỰ KIẾN</th>
+                    <th>TRẠNG THÁI</th>
+                </tr>
+            </thead>
+     </table>
 @section Scripts {
 	<script>
 		$(document).ready(function () {
@@ -43,14 +41,14 @@
 				.DataTable(
 					{
 						"ajax": {
-							"url": "/PhongMo/GetAllListPhongMo",
+							"url": "/PhongMo/GetListPhong?phong=@Model.idPhong",
 							"type": "GET",
 							"datatype": "json"
 						},
 						"columns": [
 							{ "data": "hoten" },
-							{
-								"data": "gt", "render": function (data) {
+							{ "data": "gt", "render": function (data) 
+								{
 									if (data == 0)
 										return 'Nam'
 									else
@@ -58,24 +56,28 @@
 								}
 							},
 							{ "data": "namsinh" },
-							{ "data": "phongban.name" },
-							{ "data": "Thoigian" },
+							{ "data": "ThoigianDuKien","render":function(data)
+							{
+								return data;
+							}},
 							{ "data": "tinhtrang.Name" },
+
+
 						],
-						rowCallback: function (row, data) {
-							if (data.id_tinhtrang == 1) {
-								$('td:eq(5)', row).css('background-color', ' #FFCE73');
-							} else if (data.id_tinhtrang == 2) {
-								$('td:eq(5)', row).css('background-color', '#87CEEB');
-							} else if (data.id_tinhtrang == 3) {
-								$('td:eq(5)', row).css('background-color', '#ffa329');
-							} else if (data.id_tinhtrang == 4) {
-								$('td:eq(5)', row).css('background-color', '#90EE90');
+						rowCallback: function ( row, data ) {
+						  if (data.id_tinhtrang == 1) {
+							$('td:eq(4)', row).css('background-color', ' #FFCE73');
+						  } else if(data.id_tinhtrang == 2){
+								$('td:eq(4)', row).css('background-color', '#87CEEB');
+							}else if(data.id_tinhtrang == 3){
+								$('td:eq(4)', row).css('background-color', '#ffa329');
+							} else if(data.id_tinhtrang == 4) {
+								$('td:eq(4)', row).css('background-color', '#90EE90');
 							}
 						},
 						//responsive: true,
 						//bPaginate: true,
-						"scrollY": "500px",
+						"scrollY": "450px",
 						"scrollCollapse": true,
 						"ordering": false,
 						"info": false,
@@ -115,17 +117,6 @@
 			}
 
 		});
-		document.addEventListener('DOMContentLoaded', () => {
-			setInterval(() => {
-				const clock = document.getElementById('clock');
-				if (clock) {
-					const date = new Date();
-					const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-					const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-					const seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds();
-					clock.innerText = `${hours}:${minutes}:${seconds}`;
-				}
-			}, 1000); // update every second
-		});
+
 	</script>
 }

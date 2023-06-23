@@ -1,0 +1,88 @@
+﻿@model ThongNhat_PhongMo.Models.ThongTinKhamBenh
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="col-md-12">
+    <span class="text-danger">@ViewBag.erro</span>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label  class="control-label">Mã bệnh nhân</label>
+            <input asp-for="mabn" class="form-control" id="mabn" />
+            <span asp-validation-for="mabn" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label  class="control-label">Họ Tên</label>
+            <input asp-for="hoten" class="form-control" id="hoten" />
+            <span asp-validation-for="hoten" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Năm sinh</label>
+            <input asp-for="namsinh" class="form-control" id="namsinh" />
+            <span asp-validation-for="namsinh" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Mã giới tính</label>
+            <input asp-for="gt" class="form-control" id="gt" />
+            <span asp-validation-for="namsinh" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Thời gian dự kiến</label>
+            <input type="time" asp-for="ThoigianDuKien" class="form-control" id="TG_duKien" placeholder="HH:mm" />
+            <span asp-validation-for="ThoigianDuKien" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Thêm" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Trở về danh sách</a>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+            $("#mabn").keyup(function () {
+                $.get("/user/getBNbyId", { mabn: $(this).val() }, function (data) {
+                    var json = JSON.parse(data);
+                    if (json[0] != null) {
+                        $('#hoten').val(json[0].hoten);
+                        $('#namsinh').val(json[0].namsinh);
+                        $('#sothe').val(json[0].sothe);
+                        $('#gt').val(json[0].phai);
+
+                    }
+                    else if (isEmptyObject(json)) {
+                        $('#hoten').val("");
+                        $('#namsinh').val("");
+                        $('#sothe').val("");
+                        $('#gt').val("");
+                    }
+                })
+            });
+
+            function isEmptyObject(obj) {
+                for (var prop in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        })
+
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}
+

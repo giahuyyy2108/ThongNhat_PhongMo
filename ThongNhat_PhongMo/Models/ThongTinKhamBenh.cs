@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using ThongNhat_PhongMo.Models;
@@ -12,7 +13,7 @@ namespace ThongNhat_PhongMo.Models
         [Column(TypeName ="nvarchar")]
         [StringLength(100)]
         public string hoten { get; set; }
-
+        public int gt { get; set; }
         [StringLength(7)]
         public string namsinh { get; set; }
 
@@ -21,6 +22,9 @@ namespace ThongNhat_PhongMo.Models
         public int id_tinhtrang { get; set; }
 
         public string id_user { get; set; }
+		
+		public DateTime Thoigian { get; set; }
+		public DateTime ThoigianDuKien { get; set; }
 
         [AllowNull]
         public int id_phongban { get; set; }

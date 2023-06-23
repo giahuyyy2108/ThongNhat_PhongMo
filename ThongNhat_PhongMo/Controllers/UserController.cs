@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -28,13 +29,14 @@ namespace ThongNhat_PhongMo.Controllers
         //}
         public IActionResult Index()
         {
+            ViewData["id_tinhtrang"] = new SelectList(_context.tinhtrang, "Id", "Name");
             return PartialView("index", new ThongTinKhamBenh());
         }
 
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("mabn,hoten,namsinh")] ThongTinKhamBenh Thongtin)
+        public async Task<IActionResult> Index([Bind("mabn,hoten,namsinh,id_tinhtrang")] ThongTinKhamBenh Thongtin)
         {
 
             Thongtin.id_user = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -47,6 +49,7 @@ namespace ThongNhat_PhongMo.Controllers
                 await _context.SaveChangesAsync();
                 return View(Thongtin);
             }
+            ViewData["id_tinhtrang"] = new SelectList((System.Collections.IEnumerable)Thongtin.tinhtrang, "Id", "Name");
             return View(Thongtin);
         }
         // GET: LoaiHang/Edit/5

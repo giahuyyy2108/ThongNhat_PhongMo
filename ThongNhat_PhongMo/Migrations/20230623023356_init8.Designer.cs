@@ -10,8 +10,8 @@ using ThongNhat_PhongMo.Models;
 namespace ThongNhat_PhongMo.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20230620035815_uodata")]
-    partial class uodata
+    [Migration("20230623023356_init8")]
+    partial class init8
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,6 +172,15 @@ namespace ThongNhat_PhongMo.Migrations
                 {
                     b.Property<string>("id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Thoigian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ThoigianDuKien")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("gt")
+                        .HasColumnType("int");
 
                     b.Property<string>("hoten")
                         .HasMaxLength(100)
@@ -344,7 +353,7 @@ namespace ThongNhat_PhongMo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tintrang")
+                    b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tinhtrang")
                         .WithMany("benhnhan")
                         .HasForeignKey("id_tinhtrang")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -356,7 +365,7 @@ namespace ThongNhat_PhongMo.Migrations
 
                     b.Navigation("phongban");
 
-                    b.Navigation("tintrang");
+                    b.Navigation("tinhtrang");
 
                     b.Navigation("user");
                 });

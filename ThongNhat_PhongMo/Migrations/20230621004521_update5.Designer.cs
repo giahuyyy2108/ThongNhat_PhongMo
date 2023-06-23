@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThongNhat_PhongMo.Models;
 
 namespace ThongNhat_PhongMo.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230621004521_update5")]
+    partial class update5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,15 +172,6 @@ namespace ThongNhat_PhongMo.Migrations
                 {
                     b.Property<string>("id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Thoigian")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ThoigianDuKien")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("gt")
-                        .HasColumnType("int");
 
                     b.Property<string>("hoten")
                         .HasMaxLength(100)

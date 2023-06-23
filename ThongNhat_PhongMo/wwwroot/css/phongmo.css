@@ -1,0 +1,56 @@
+﻿.table1 {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.table1 td, .table1 th {
+    padding: 5px;
+    border: 1px solid #ddd;
+    font-size: 2.2rem;
+}
+
+.table1 th {
+    background-color: #1c558e;
+    color: white;
+}
+
+h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    font-weight:bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+body{
+    font-family:Arial;
+}
+
+
+
+.text-center {
+    margin-top: 10rem;
+}
+
+.display-4 {
+    background: white;
+    text-shadow: 1px 1px #fff;
+    color: #1c558e;
+    font-weight: bold;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+
+#clock {
+    background-color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 1px 1px #fff; /* Tạo hiệu ứng bóng cho chữ */
+    letter-spacing: .1em; /* Tăng khoảng cách giữa các chữ số */
+    font-family: Arial, sans-serif; /* Chọn font chữ */
+    text-align: center;
+}
+

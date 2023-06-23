@@ -10,8 +10,8 @@ using ThongNhat_PhongMo.Models;
 namespace ThongNhat_PhongMo.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20230619074751_init")]
-    partial class init
+    [Migration("20230621004213_update3")]
+    partial class update3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -174,16 +174,14 @@ namespace ThongNhat_PhongMo.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("hoten")
-                        .HasColumnType("nvarchar");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("id_phongban")
+                    b.Property<int>("id_phongban")
                         .HasColumnType("int");
 
                     b.Property<int>("id_tinhtrang")
                         .HasColumnType("int");
-
-                    b.Property<string>("id_user")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("mabn")
                         .HasColumnType("nvarchar(max)");
@@ -197,8 +195,6 @@ namespace ThongNhat_PhongMo.Migrations
                     b.HasIndex("id_phongban");
 
                     b.HasIndex("id_tinhtrang");
-
-                    b.HasIndex("id_user");
 
                     b.ToTable("benhnhan");
                 });
@@ -271,9 +267,6 @@ namespace ThongNhat_PhongMo.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("id_phongban")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -342,23 +335,19 @@ namespace ThongNhat_PhongMo.Migrations
                 {
                     b.HasOne("ThongNhat_PhongMo.Models.PhongBan", "phongban")
                         .WithMany("thongTinKhamBenh")
-                        .HasForeignKey("id_phongban");
+                        .HasForeignKey("id_phongban")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tintrang")
+                    b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tinhtrang")
                         .WithMany("benhnhan")
                         .HasForeignKey("id_tinhtrang")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThongNhat_PhongMo.Models.User", "user")
-                        .WithMany("benhnhan")
-                        .HasForeignKey("id_user");
-
                     b.Navigation("phongban");
 
-                    b.Navigation("tintrang");
-
-                    b.Navigation("user");
+                    b.Navigation("tinhtrang");
                 });
 
             modelBuilder.Entity("ThongNhat_PhongMo.Models.PhongBan", b =>
@@ -367,11 +356,6 @@ namespace ThongNhat_PhongMo.Migrations
                 });
 
             modelBuilder.Entity("ThongNhat_PhongMo.Models.TinhTrang", b =>
-                {
-                    b.Navigation("benhnhan");
-                });
-
-            modelBuilder.Entity("ThongNhat_PhongMo.Models.User", b =>
                 {
                     b.Navigation("benhnhan");
                 });
