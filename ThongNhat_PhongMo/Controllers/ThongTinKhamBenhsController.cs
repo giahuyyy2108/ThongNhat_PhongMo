@@ -29,6 +29,7 @@ namespace ThongNhat_PhongMo.Controllers
                                     .Include(t => t.phongban)
                                     .Include(t => t.tinhtrang)
                                     .Include(t => t.user)
+                                    .Where(t=>t.Thoigian.Date == DateTime.Now.Date)
                                     .Where(t => t.id_phongban == Int32.Parse(User.FindFirstValue(ClaimTypes.Name).Substring(7)))
                                     .OrderBy(t=>t.Thoigian);
             return View(await dataBaseContext.ToListAsync());
