@@ -32,12 +32,12 @@
 
 			var recentPlatformTable;
 			var api;
-			var curRow = 0;
+			var curRow = -1;
 			var timer;
 
 			recentPlatformTable = $('#table1')
 				.on('xhr.dt', function (e, settings, json, xhr) {
-					curRow = 0;
+					curRow = -1;
 					setTimer();
 				})
 				.DataTable(
@@ -75,8 +75,8 @@
 						},
 						//responsive: true,
 						//bPaginate: true,
-						"scrollY": "500px",
-						"scrollCollapse": true,
+						"scrollY": "430px",
+						"scrollCollapse": false,
 						"ordering": false,
 						"info": false,
 						"bFilter": false,

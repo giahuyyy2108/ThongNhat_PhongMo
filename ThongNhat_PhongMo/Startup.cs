@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,11 +36,17 @@ namespace ThongNhat_PhongMo
             );
             services.AddHttpClient<UserController>();
 
+            services.AddLogging(loggingBuilder => {
+                loggingBuilder.AddConsole()
+                    .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);
+                loggingBuilder.AddDebug();
+            });
+
             //đăng ký dịch vụ kết nối DB
             services.AddDbContext<DataBaseContext>(options => {
                 string connectstring = Configuration.GetConnectionString("DataContextConnection");
                 options.UseSqlServer(connectstring);
-
+                options.EnableSensitiveDataLogging(true);
 
             });
             services.AddIdentity<User, IdentityRole>()
