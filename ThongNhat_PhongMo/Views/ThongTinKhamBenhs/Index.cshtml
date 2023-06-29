@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ThongNhat_PhongMo.Models.ThongTinKhamBenh>
+
+@{
+    ViewData["Title"] = "Phòng mổ";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+
+<p>
+    <a asp-action="Create">Tạo mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Mã bệnh nhân
+            </th>
+            <th>
+                Họ tên
+            </th>
+            <th>
+                Năm sinh
+            </th>
+            <th>
+                Phái
+            </th>
+            <th>
+                Tình trạng
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@{int stt= 1;}
+@foreach (var item in Model) {
+            if(item.id_tinhtrang < 5)
+            {
+                <tr>
+                    
+                    <td>
+                        @stt
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mabn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.hoten)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.namsinh)
+                    </td>
+
+                    @if (item.gt == 1)
+                    {
+                        <td>
+                            Nữ
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            Nam
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tinhtrang.Name)
+                    </td>
+                    <td>
+                        <div style="display:flex;">
+                            <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-primary btn-sm">Đổi phòng</a>
+                            <form asp-action="Update" asp-route-id="@item.id" style="margin:0 5px 0 5px">
+                                <button type="submit" class="= btn btn-success btn-sm">Cập nhật</button>
+                            </form>
+                            <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger btn-sm">Xóa</a>
+                        </div>
+                    </td>
+                </tr>
+                stt++;
+            }
+}
+    </tbody>
+</table>

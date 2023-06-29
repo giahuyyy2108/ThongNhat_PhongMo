@@ -1,0 +1,122 @@
+﻿@model ThongNhat_PhongMo.Models.PhongViewModel
+
+@{
+    ViewData["Title"] = "Phong";
+    Layout = "~/Views/Shared/_phongmo.cshtml";
+}
+<div class="row" style="margin: 30px 0 30px 0">
+        <div class="col-sm-5 ">
+            <img src="/images/bvtn_logo.png" alt="logo" style="width:530px" class="logo" />
+        </div>
+        <div class="col-sm-7">
+		<h1> DANH SÁCH HIỆN TRẠNG BỆNH NHÂN TẠI PHÒNG @Model.idPhong </h1>
+        </div>
+</div>
+     <table class="table1" id="table1">
+            <thead>
+                <tr>
+                    <th>TÊN BỆNH NHÂN</th>
+                    <th>GIỚI TÍNH</th>
+					<th> NĂM SINH</th>
+					<th> THỜI GIAN DỰ KIẾN</th>
+                    <th>TRẠNG THÁI</th>
+                </tr>
+            </thead>
+     </table>
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			// Custom filtering function which will search data in column four between two values
+
+			var recentPlatformTable;
+			var api;
+			var curRow = 0;
+			var timer;
+
+			recentPlatformTable = $('#table1')
+				.on('xhr.dt', function (e, settings, json, xhr) {
+					curRow = 0;
+					setTimer();
+				})
+				.DataTable(
+					{
+						"ajax": {
+							"url": "/PhongMo/GetListPhong?phong=@Model.idPhong",
+							"type": "GET",
+							"datatype": "json"
+						},
+						"columns": [
+							{ "data": "hoten" },
+							{ "data": "gt", "render": function (data) 
+								{
+									if (data == 0)
+										return 'Nam'
+									else
+										return 'Nữ'
+								}
+							},
+							{ "data": "namsinh" },
+							{ "data": "ThoigianDuKien","render":function(data)
+							{
+								return data;
+							}},
+							{ "data": "tinhtrang.Name" },
+
+
+						],
+						rowCallback: function ( row, data ) {
+						  if (data.id_tinhtrang == 1) {
+							$('td:eq(4)', row).css('background-color', ' #FFCE73');
+						  } else if(data.id_tinhtrang == 2){
+								$('td:eq(4)', row).css('background-color', '#87CEEB');
+							}else if(data.id_tinhtrang == 3){
+								$('td:eq(4)', row).css('background-color', '#ffa329');
+							} else if(data.id_tinhtrang == 4) {
+								$('td:eq(4)', row).css('background-color', '#90EE90');
+							}
+						},
+						//responsive: true,
+						//bPaginate: true,
+						"scrollY": "450px",
+						"scrollCollapse": true,
+						"ordering": false,
+						"info": false,
+						"bFilter": false,
+						"bInfo": false,
+						scroller: true,
+						"footerCallback": function (row, data, start, end, display) {
+							api = this.api();
+						},
+
+					});
+			function setTimer() {
+				if (timer) {
+					clearInterval(timer);
+				}
+
+				timer = setInterval(function () {
+					if (api === undefined)
+						return;
+
+					var num_rows = api.page.info().recordsTotal;
+					curRow += 1;
+					//console.log("*****row " + curRow + " of " + num_rows);
+
+					if (curRow > num_rows) {
+						//console.log("*****Reloading");
+						clearInterval(timer);
+						$('#table1').DataTable().ajax.reload();
+					}
+					else {
+						api.settings().scroller().scrollToRow(curRow, 1000);
+
+						// removed due to issues with JS BIN
+						//console.log(api.rows({ page: 'current' }).data());
+					}
+				}, 3000);
+			}
+
+		});
+
+	</script>
+}

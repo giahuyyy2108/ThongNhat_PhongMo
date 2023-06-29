@@ -171,10 +171,20 @@ namespace ThongNhat_PhongMo.Migrations
                     b.Property<string>("id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("hoten")
-                        .HasColumnType("nvarchar");
+                    b.Property<DateTime>("Thoigian")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int?>("id_phongban")
+                    b.Property<DateTime>("ThoigianDuKien")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("gt")
+                        .HasColumnType("int");
+
+                    b.Property<string>("hoten")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("id_phongban")
                         .HasColumnType("int");
 
                     b.Property<int>("id_tinhtrang")
@@ -269,9 +279,6 @@ namespace ThongNhat_PhongMo.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("id_phongban")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -340,9 +347,11 @@ namespace ThongNhat_PhongMo.Migrations
                 {
                     b.HasOne("ThongNhat_PhongMo.Models.PhongBan", "phongban")
                         .WithMany("thongTinKhamBenh")
-                        .HasForeignKey("id_phongban");
+                        .HasForeignKey("id_phongban")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tintrang")
+                    b.HasOne("ThongNhat_PhongMo.Models.TinhTrang", "tinhtrang")
                         .WithMany("benhnhan")
                         .HasForeignKey("id_tinhtrang")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -354,7 +363,7 @@ namespace ThongNhat_PhongMo.Migrations
 
                     b.Navigation("phongban");
 
-                    b.Navigation("tintrang");
+                    b.Navigation("tinhtrang");
 
                     b.Navigation("user");
                 });

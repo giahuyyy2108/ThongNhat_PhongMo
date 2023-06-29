@@ -113,7 +113,7 @@ namespace ThongNhat_PhongMo.Areas.Identity.Pages.Account
                             if (item.Equals("PT-001"))
                             {
                                 _logger.LogInformation("User logged in.");
-                                return LocalRedirect("/user/");
+                                return LocalRedirect("/ThongTinKhamBenhs/");
                             }
                         }
                     }
