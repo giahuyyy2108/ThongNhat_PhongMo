@@ -4,49 +4,39 @@
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
-
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Xóa bệnh nhân</h3>
 <div>
-    <h4>ThongTinKhamBenh</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.hoten)
+            Họ tên
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.hoten)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.namsinh)
+            Năm sinh
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.namsinh)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.mabn)
+            Mã Bệnh nhân
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.mabn)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.phongban)
+            Phòng
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.phongban.Id)
         </dd class>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tinhtrang)
+            Tình trạng
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tinhtrang.id)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.user)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.user.Id)
+            @Html.DisplayFor(model => model.tinhtrang.Name)
         </dd class>
     </dl>
     

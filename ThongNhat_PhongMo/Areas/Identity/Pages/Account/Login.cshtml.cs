@@ -48,7 +48,9 @@ namespace ThongNhat_PhongMo.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "Phải nhập tên đăng nhập")]
             //[EmailAddress]
+            [Display(Name ="Tài khoản")]
             public string EmailOrUserName { get; set; }
+            [Display(Name = "Mật khẩu")]
 
             [Required(ErrorMessage = "Phải nhập mật khẩu")]
             [DataType(DataType.Password)]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,27 +13,29 @@ using ThongNhat_PhongMo.Models;
 
 namespace ThongNhat_PhongMo.Controllers
 {
-    [Authorize(Roles ="PT-001")]
+    //[Authorize(Roles ="PT-001")]
     public class ThongTinKhamBenhsController : Controller
     {
         private readonly DataBaseContext _context;
-
-        public ThongTinKhamBenhsController(DataBaseContext context)
+        private readonly UserManager<User> _userManager;
+        public ThongTinKhamBenhsController(DataBaseContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ThongTinKhamBenhs
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.benhnhan
+            var dataBaseContext =await _context.benhnhan
                                     .Include(t => t.phongban)
                                     .Include(t => t.tinhtrang)
                                     .Include(t => t.user)
                                     .Where(t=>t.Thoigian.Date == DateTime.Now.Date)
-                                    .Where(t => t.id_phongban == Int32.Parse(User.FindFirstValue(ClaimTypes.Name).Substring(7)))
-                                    .OrderBy(t=>t.Thoigian);
-            return View(await dataBaseContext.ToListAsync());
+                                    .Where(t => t.id_phongban == Int32.Parse(_userManager.GetUserName(User).Substring(7)))
+                                    .OrderBy(t=>t.Thoigian)
+                                    .ToListAsync();
+            return View(dataBaseContext);
         }
 
         // GET: ThongTinKhamBenhs/Details/5
@@ -71,7 +74,7 @@ namespace ThongNhat_PhongMo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("hoten,namsinh,mabn,ThoigianDuKien")] ThongTinKhamBenh thongTinKhamBenh)
+        public async Task<IActionResult> Create([Bind("hoten,namsinh,mabn,ThoigianDuKien,gt")] ThongTinKhamBenh thongTinKhamBenh)
         {
             thongTinKhamBenh.id_tinhtrang = 1;
             thongTinKhamBenh.id_phongban = Int32.Parse(User.FindFirstValue(ClaimTypes.Name).Substring(7));

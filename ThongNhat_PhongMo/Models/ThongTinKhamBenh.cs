@@ -12,10 +12,12 @@ namespace ThongNhat_PhongMo.Models
 
         [Column(TypeName ="nvarchar")]
         [StringLength(100)]
+        [Required(ErrorMessage ="Phải nhập đầy đủ thông tin")]
         public string hoten { get; set; }
         public int gt { get; set; }
         [StringLength(7)]
         public string namsinh { get; set; }
+        [Required(ErrorMessage = "Phải nhập đầy đủ thông tin")]
 
         public string mabn { get; set; }
 

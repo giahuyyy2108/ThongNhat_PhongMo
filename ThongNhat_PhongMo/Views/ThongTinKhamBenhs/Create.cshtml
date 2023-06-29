@@ -11,7 +11,7 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label  class="control-label">Mã bệnh nhân</label>
-            <input asp-for="mabn" class="form-control" id="mabn" />
+            <input asp-for="mabn" class="form-control" id="mabn" autofocus/>
             <span asp-validation-for="mabn" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -26,7 +26,11 @@
         </div>
         <div class="form-group">
             <label class="control-label">Mã giới tính</label>
-            <input asp-for="gt" class="form-control" id="gt" />
+            @*<input asp-for="gt" class="form-control" id="gt" />*@
+            <select asp-for="gt" class="form-control" id="gt">
+                <option value="1">Nữ</option>
+                <option value="0">Nam</option>
+            </select>
             <span asp-validation-for="namsinh" class="text-danger"></span>
         </div>
         <div class="form-group">

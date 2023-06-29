@@ -22,24 +22,22 @@
                     <th>TRẠNG THÁI</th>
                 </tr>
             </thead>
+			
      </table>
 @section Scripts {
 	<script>
+		var recentPlatformTable;
+		var api;
+		var curRow = -1;
+		var timer;
+
 		$(document).ready(function () {
-			// Custom filtering function which will search data in column four between two values
-
-			var recentPlatformTable;
-			var api;
-			var curRow = 0;
-			var timer;
-
-			recentPlatformTable = $('#table1')
+				recentPlatformTable = $('#table1')
 				.on('xhr.dt', function (e, settings, json, xhr) {
-					curRow = 0;
+					curRow = -1;
 					setTimer();
 				})
-				.DataTable(
-					{
+				.DataTable({
 						"ajax": {
 							"url": "/PhongMo/GetListPhong?phong=@Model.idPhong",
 							"type": "GET",
@@ -77,46 +75,47 @@
 						},
 						//responsive: true,
 						//bPaginate: true,
-						"scrollY": "450px",
-						"scrollCollapse": true,
+						"scrollY": "430px",
+						"scrollCollapse": false,
 						"ordering": false,
 						"info": false,
 						"bFilter": false,
 						"bInfo": false,
 						scroller: true,
 						"footerCallback": function (row, data, start, end, display) {
-							api = this.api();
+							api = this.api() ,row;
 						},
 
-					});
-			function setTimer() {
+				});
+			
+		});
+
+		function setTimer() {
 				if (timer) {
 					clearInterval(timer);
 				}
 
-				timer = setInterval(function () {
-					if (api === undefined)
-						return;
+			timer = setInterval( function () {
+			if (api === undefined)
+				return;
 
-					var num_rows = api.page.info().recordsTotal;
-					curRow += 1;
-					//console.log("*****row " + curRow + " of " + num_rows);
+			var num_rows = api.page.info().recordsTotal;
+			curRow += 1;
+			//console.log("*****row " + curRow + " of " + num_rows);
 
-					if (curRow > num_rows) {
-						//console.log("*****Reloading");
-						clearInterval(timer);
-						$('#table1').DataTable().ajax.reload();
-					}
-					else {
-						api.settings().scroller().scrollToRow(curRow, 1000);
-
-						// removed due to issues with JS BIN
-						//console.log(api.rows({ page: 'current' }).data());
-					}
-				}, 3000);
+			if (curRow > num_rows) {
+				//console.log("*****Reloading");
+				clearInterval(timer);
+				$('#table1').DataTable().ajax.reload();
 			}
+			else {
+				api.settings().scroller().scrollToRow(curRow, 1000);
 
-		});
+				// removed due to issues with JS BIN
+				//console.log(api.rows({ page: 'current' }).data());
+			}
+			}, 5000);
+		}
 
 	</script>
 }
