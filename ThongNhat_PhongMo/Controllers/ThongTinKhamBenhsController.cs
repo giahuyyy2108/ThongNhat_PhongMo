@@ -13,7 +13,7 @@ using ThongNhat_PhongMo.Models;
 
 namespace ThongNhat_PhongMo.Controllers
 {
-    //[Authorize(Roles ="PT-001")]
+    [Authorize(Roles ="PT-001")]
     public class ThongTinKhamBenhsController : Controller
     {
         private readonly DataBaseContext _context;
