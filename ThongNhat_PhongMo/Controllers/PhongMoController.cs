@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal.Account;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -49,7 +50,7 @@ namespace ThongNhat_PhongMo.Controllers
 				.OrderBy(t => t.Thoigian)
                 .ToListAsync();
             PhongViewModel data = new PhongViewModel();
-            data.idPhong = id;
+            data.phong = await _context.phongBan.Where(p => p.Id == id).FirstOrDefaultAsync();
             foreach (var item in dataBaseContext)
             {
                 data.benhnhan = item;

@@ -28,6 +28,8 @@ namespace ThongNhat_PhongMo.Models
 		public DateTime Thoigian { get; set; }
 		public DateTime ThoigianDuKien { get; set; }
 
+        public string Thoigianhoanthanh { get; set; }
+
         [AllowNull]
         public int id_phongban { get; set; }
         [ForeignKey("id_phongban")]
@@ -35,7 +37,6 @@ namespace ThongNhat_PhongMo.Models
 
         [ForeignKey("id_tinhtrang")]
         public TinhTrang tinhtrang { get; set; }
-
 
         [ForeignKey("id_user")]
         public User user { get; set; }

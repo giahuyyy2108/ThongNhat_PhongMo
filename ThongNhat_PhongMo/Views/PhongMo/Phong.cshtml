@@ -9,7 +9,7 @@
             <img src="/images/bvtn_logo.png" alt="logo" style="width:530px" class="logo" />
         </div>
         <div class="col-sm-7">
-		<h1> DANH SÁCH HIỆN TRẠNG BỆNH NHÂN TẠI PHÒNG @Model.idPhong </h1>
+		<h1> DANH SÁCH HIỆN TRẠNG BỆNH NHÂN TẠI PHÒNG @Model.phong.Id </h1>
         </div>
 </div>
      <table class="table1" id="table1">
@@ -19,6 +19,7 @@
                     <th>GIỚI TÍNH</th>
 					<th> NĂM SINH</th>
 					<th> THỜI GIAN DỰ KIẾN</th>
+					<th> THỜI GIAN HOÀN THÀNH</th>
                     <th>TRẠNG THÁI</th>
                 </tr>
             </thead>
@@ -39,7 +40,7 @@
 				})
 				.DataTable({
 						"ajax": {
-							"url": "/PhongMo/GetListPhong?phong=@Model.idPhong",
+							"url": "/PhongMo/GetListPhong?phong=@Model.phong.Id",
 							"type": "GET",
 							"datatype": "json"
 						},
@@ -58,24 +59,32 @@
 							{
 								return data;
 							}},
+							{
+								"data": "Thoigianhoanthanh", "render": function (data) {
+									if(data!=null){
+										return data;
+									}
+									return null;
+								}
+							},
 							{ "data": "tinhtrang.Name" },
 
 
 						],
 						rowCallback: function ( row, data ) {
 						  if (data.id_tinhtrang == 1) {
-							$('td:eq(4)', row).css('background-color', ' #FFCE73');
+							$('td:eq(5)', row).css('background-color', ' #FFCE73');
 						  } else if(data.id_tinhtrang == 2){
-								$('td:eq(4)', row).css('background-color', '#87CEEB');
+								$('td:eq(5)', row).css('background-color', '#87CEEB');
 							}else if(data.id_tinhtrang == 3){
-								$('td:eq(4)', row).css('background-color', '#ffa329');
+								$('td:eq(5)', row).css('background-color', '#ffa329');
 							} else if(data.id_tinhtrang == 4) {
-								$('td:eq(4)', row).css('background-color', '#90EE90');
+								$('td:eq(5)', row).css('background-color', '#90EE90');
 							}
 						},
 						//responsive: true,
 						//bPaginate: true,
-						"scrollY": "430px",
+						"scrollY": "@Model.phong.sceensize",
 						"scrollCollapse": false,
 						"ordering": false,
 						"info": false,
@@ -83,7 +92,7 @@
 						"bInfo": false,
 						scroller: true,
 						"footerCallback": function (row, data, start, end, display) {
-							api = this.api() ,row;
+							api = this.api() ;
 						},
 
 				});
@@ -114,7 +123,7 @@
 				// removed due to issues with JS BIN
 				//console.log(api.rows({ page: 'current' }).data());
 			}
-			}, 5000);
+			}, @Model.phong.time);
 		}
 
 	</script>

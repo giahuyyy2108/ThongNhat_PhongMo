@@ -2,7 +2,7 @@
 {
     public class PhongViewModel
     {
-        public int idPhong { get; set; }
+        public PhongBan phong { get; set; }
 
         public ThongTinKhamBenh benhnhan { get; set; }
     }

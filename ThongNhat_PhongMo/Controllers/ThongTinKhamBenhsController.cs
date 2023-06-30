@@ -196,6 +196,10 @@ namespace ThongNhat_PhongMo.Controllers
         {
             var thongTinKhamBenh = await _context.benhnhan.FindAsync(id);
             thongTinKhamBenh.id_tinhtrang++;
+            if(thongTinKhamBenh.id_tinhtrang == 4)
+            {
+                thongTinKhamBenh.Thoigianhoanthanh = DateTime.Now.ToString("HH:mm");
+            }
             _context.benhnhan.Update(thongTinKhamBenh);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -209,6 +213,7 @@ namespace ThongNhat_PhongMo.Controllers
                                     .Include(t => t.tinhtrang)
                                     .Include(t => t.user)
                                     .Where(t=> t.id_tinhtrang < 5)
+                                    .Where(t=> t.Thoigian.Date == DateTime.Now.Date)
                                     .ToList();
             foreach (var item in data)
             {

@@ -16,6 +16,11 @@ namespace ThongNhat_PhongMo.Models
         [StringLength(50)]
         public string name { get; set; }
 
+
+        public string sceensize { get; set; }
+
+        public string time { get; set; }
+
         [JsonIgnore]
         [IgnoreDataMember]
         public ICollection<ThongTinKhamBenh> thongTinKhamBenh { get; set; }
