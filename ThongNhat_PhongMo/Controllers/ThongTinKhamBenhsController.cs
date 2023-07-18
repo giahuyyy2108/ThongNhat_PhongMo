@@ -61,6 +61,7 @@ namespace ThongNhat_PhongMo.Controllers
         }
 
         // GET: ThongTinKhamBenhs/Create
+        //Khởi tạo view Cho Trang thêm thông tin bệnh nhân
         public IActionResult Create()
         {
             ViewData["id_tinhtrang"] = new SelectList(_context.tinhtrang, "id", "Name");
@@ -71,7 +72,7 @@ namespace ThongNhat_PhongMo.Controllers
             };
             return View(modle);
         }
-
+        //Thêm thông tin bệnh nhân
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("hoten,namsinh,mabn,ThoigianDuKien,gt")] ThongTinKhamBenh thongTinKhamBenh)
@@ -156,6 +157,7 @@ namespace ThongNhat_PhongMo.Controllers
         }
 
         // GET: ThongTinKhamBenhs/Delete/5
+        // khoi tao view Xóa thông tin bệnh nhân
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -177,6 +179,7 @@ namespace ThongNhat_PhongMo.Controllers
         }
 
         // POST: ThongTinKhamBenhs/Delete/5
+        // xóa thông tin bệnh nhan
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -191,7 +194,7 @@ namespace ThongNhat_PhongMo.Controllers
         {
             return _context.benhnhan.Any(e => e.id == id);
         }
-
+        // cập nhật thông tin bệnh nhân
         public async Task<IActionResult> Update(string id)
         {
             var thongTinKhamBenh = await _context.benhnhan.FindAsync(id);
@@ -205,7 +208,7 @@ namespace ThongNhat_PhongMo.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
+        //Kiểm tra bệnh nhân tồn tại trong danh sách trong ngày
         public bool checkbn(ThongTinKhamBenh benhnhan)
         {
             var data = _context.benhnhan
