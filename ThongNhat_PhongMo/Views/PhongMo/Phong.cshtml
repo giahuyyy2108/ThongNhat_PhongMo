@@ -56,18 +56,26 @@
 										return 'Nữ'
 								}
 							},
-							{ "data": "namsinh" },
-							{ "data": "ThoigianDuKien","render":function(data)
-							{
-								return data;
-							}},
+							{ 
+								"data": "namsinh",
+								"class": "text-center"
+							
+							},
+							{ 
+								"data": "ThoigianDuKien","render":function(data)
+								{
+									return data;
+								},
+								"class": "text-center"
+							},
 							{
 								"data": "Thoigianhoanthanh", "render": function (data) {
 									if(data!=null){
 										return data;
 									}
 									return null;
-								}
+								},
+								"class": "text-center"
 							},
 							{ "data": "tinhtrang.Name" },
 
