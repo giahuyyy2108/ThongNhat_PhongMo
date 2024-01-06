@@ -40,8 +40,8 @@ namespace ThongNhat_PhongMo.Controllers
 				                                                                            DateTimeZoneHandling = DateTimeZoneHandling.Utc
 			                                                                            });
 		}
-		// API Nhan thong tin benh nhan tai phong
-
+        //Input: Id (mã phòng)
+        //Output: Danh sách bệnhh nhân theo từng phòng mổ
 		public async Task<IActionResult> Phong(int id)
         {
             var dataBaseContext = await _context.benhnhan
@@ -61,6 +61,9 @@ namespace ThongNhat_PhongMo.Controllers
             return View(data);
         }
 
+        //API LẤY DỮ LIỆU BỆNH NHÂN THEO TỪNG PHÒNG DẠNG JSON
+        //INPUT: int phong (mã phòng)
+        //OUTPUT: danh sách bệnh nhân hiện diện tại phòng mổ
         public async Task<IActionResult> GetListPhong(int phong)
         {
             var dataBaseContext = await _context.benhnhan
@@ -76,7 +79,7 @@ namespace ThongNhat_PhongMo.Controllers
                                                                                 {
 				                                                                  DateFormatString = "HH:mm", 
                                                                                   DateTimeZoneHandling = DateTimeZoneHandling.Utc 
-                                                                                });
+            });
         }
     }
 }

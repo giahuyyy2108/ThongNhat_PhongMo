@@ -24,7 +24,7 @@ namespace ThongNhat_PhongMo.Controllers
             _userManager = userManager;
         }
 
-        // GET: ThongTinKhamBenhs
+        // Trang thông tin khám bệnh
         public async Task<IActionResult> Index()
         {
             var dataBaseContext =await _context.benhnhan
@@ -60,7 +60,6 @@ namespace ThongNhat_PhongMo.Controllers
             return View(thongTinKhamBenh);
         }
 
-        // GET: ThongTinKhamBenhs/Create
         //Khởi tạo view Cho Trang thêm thông tin bệnh nhân
         public IActionResult Create()
         {
@@ -194,7 +193,8 @@ namespace ThongNhat_PhongMo.Controllers
         {
             return _context.benhnhan.Any(e => e.id == id);
         }
-        // cập nhật thông tin bệnh nhân
+        // cập nhật Tình trạng bệnh nhân
+        //Input: id (mã bệnh nhân)
         public async Task<IActionResult> Update(string id)
         {
             var thongTinKhamBenh = await _context.benhnhan.FindAsync(id);
@@ -209,6 +209,7 @@ namespace ThongNhat_PhongMo.Controllers
         }
 
         //Kiểm tra bệnh nhân tồn tại trong danh sách trong ngày
+        //Input: Model ThongTinKhamBenh
         public bool checkbn(ThongTinKhamBenh benhnhan)
         {
             var data = _context.benhnhan
