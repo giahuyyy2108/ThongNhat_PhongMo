@@ -1,7 +1,7 @@
 ﻿@model ThongNhat_PhongMo.Models.ThongTinKhamBenh
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm Bệnh nhân";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
@@ -11,7 +11,7 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label  class="control-label">Mã bệnh nhân</label>
-            <input asp-for="mabn" class="form-control" id="mabn" autofocus/>
+            <input autofocus asp-for="mabn" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" type="text" class="form-control" name="mabn" id="mabn" maxlength="8">
             <span asp-validation-for="mabn" class="text-danger"></span>
         </div>
         <div class="form-group">
