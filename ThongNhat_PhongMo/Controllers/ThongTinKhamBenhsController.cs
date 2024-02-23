@@ -31,8 +31,9 @@ namespace ThongNhat_PhongMo.Controllers
                                     .Include(t => t.phongban)
                                     .Include(t => t.tinhtrang)
                                     .Include(t => t.user)
+                                    .Include(t=>t.phongban)
                                     .Where(t=>t.Thoigian.Date == DateTime.Now.Date)
-                                    .Where(t => t.id_phongban == Int32.Parse(_userManager.GetUserName(User).Substring(7)))
+                                    .Where(t => t.id_user == _userManager.GetUserId(User))
                                     .OrderBy(t=>t.Thoigian)
                                     .ToListAsync();
             return View(dataBaseContext);
@@ -76,11 +77,15 @@ namespace ThongNhat_PhongMo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("hoten,namsinh,mabn,ThoigianDuKien,gt")] ThongTinKhamBenh thongTinKhamBenh)
         {
+            var pb = await _context.CT_PhongBan.FirstOrDefaultAsync(p => p.Id_User == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             thongTinKhamBenh.id_tinhtrang = 1;
-            thongTinKhamBenh.id_phongban = Int32.Parse(User.FindFirstValue(ClaimTypes.Name).Substring(7));
+            thongTinKhamBenh.id_phongban = pb.id_phongban;
             thongTinKhamBenh.id = Guid.NewGuid().ToString();
             thongTinKhamBenh.id_user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             thongTinKhamBenh.Thoigian = DateTime.Now;
+
+
             if (ModelState.IsValid)
             {
                 if (checkbn(thongTinKhamBenh) == true)

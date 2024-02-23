@@ -1,0 +1,40 @@
+﻿@model ThongNhat_PhongMo.Models.PhongBan
+
+@{
+    ViewData["Title"] = "Sửa";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<hr />
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="control-label">Tên phòng</label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="sceensize" class="form-control" hidden/>
+                <span asp-validation-for="sceensize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="time" class="form-control" hidden />
+                <span asp-validation-for="time" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở về danh sách</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

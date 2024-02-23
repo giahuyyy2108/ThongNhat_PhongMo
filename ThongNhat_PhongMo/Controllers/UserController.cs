@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ThongNhat_Hospital;
 using ThongNhat_PhongMo.Models;
@@ -17,91 +19,73 @@ namespace ThongNhat_PhongMo.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly DataBaseContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserController(HttpClient httpClient, DataBaseContext context) 
+
+
+        public UserController(HttpClient httpClient, DataBaseContext context,UserManager<User> userManager,SignInManager<User> signInManager) 
         { 
             _httpClient = httpClient;
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         //public IActionResult Index()
         //{
         //    return View();
         //}
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewData["id_tinhtrang"] = new SelectList(_context.tinhtrang, "Id", "Name");
-            return PartialView("index", new ThongTinKhamBenh());
+			return View(await _context.user.ToListAsync());
+		}
+
+
+        public async Task<IActionResult> logoutUser()
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect("/");
+        }
+        // Khởi tạo View Trang thêm người dùng
+        public IActionResult Create()
+        {
+            //View bag lấy ra select Phòng ban
+            ViewData["id_phongban"] = new SelectList(_context.phongBan, "Id", "name");
+            return View();
         }
 
-      
+        //xử lý Lưu người dùng
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("mabn,hoten,namsinh,id_tinhtrang")] ThongTinKhamBenh Thongtin)
+        public async Task<IActionResult> Create([Bind("Id,hoten,UserName")] User user,int id_phong)
         {
-
-            Thongtin.id_user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Thongtin.id_phongban = Int32.Parse(User.FindFirstValue(ClaimTypes.Name).Substring(7));
-            Thongtin.id_tinhtrang = 1;
-            Thongtin.id = Guid.NewGuid().ToString();
             if (ModelState.IsValid)
             {
-                _context.Add(Thongtin);
-                await _context.SaveChangesAsync();
-                return View(Thongtin);
-            }
-            ViewData["id_tinhtrang"] = new SelectList((System.Collections.IEnumerable)Thongtin.tinhtrang, "Id", "Name");
-            return View(Thongtin);
-        }
-        // GET: LoaiHang/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var loaiHang = await _context.benhnhan.FindAsync(id);
-            if (loaiHang == null)
-            {
-                return NotFound();
-            }
-            return PartialView(loaiHang);
-        }
-
-        // POST: LoaiHang/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("id_tinhtrang")] ThongTinKhamBenh benhnhan)
-        {
-            if (id != benhnhan.id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if(user.hoten != null && user.UserName != null)
                 {
-                    benhnhan.id_tinhtrang++;
-                    _context.Update(benhnhan);
+                    //Mật khẩu mặt định : 123123
+                    user.PasswordHash = "AQAAAAEAACcQAAAAEBbxllSqeEJ0nwFoPqDx3V4oNJuPwcoAovSKSXGPVQaao6oERjJHnsh3s+M/f4I00g==";
+                    user.EmailConfirmed = true;
+                    user.Email = user.UserName + "@example.com";
+                    user.NormalizedEmail = user.UserName + "@example.com";
+                    user.NormalizedUserName = user.UserName;
+                    //lưu thêm phân quyền người dùng tại phòng ban
+                    CT_PhongBan phongban = new CT_PhongBan();
+                    phongban.Id_User = user.Id;
+                    phongban.id_phongban = id_phong;
+                    _context.Add(user);
+                    _context.Add(phongban);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    //if (!LoaiHangExists(loaiHang.Id))
-                    //{
-                    //    return NotFound();
-                    //}
-                    //else
-                    //{
-                    //    throw;
-                    //}
+                    ViewBag.erro = "Vui lòng nhấp đầy đủ thông tin";
                 }
-                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Edit", _context.benhnhan.ToList()) });
             }
-            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Edit", benhnhan) });
+            ViewData["id_phongban"] = new SelectList(_context.phongBan, "Id", "name");
+            return View(user);
         }
 
         public async Task<IActionResult> getBNbyId(string mabn)
@@ -120,6 +104,173 @@ namespace ThongNhat_PhongMo.Controllers
             {
                 return BadRequest($"An error occurred: {ex.Message}");
             }
+        }
+
+
+        // GET: CT_PhongBan/Edit/5
+        public async Task<IActionResult> Edit(string Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.user.FindAsync(Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["id_phongban"] = new SelectList(_context.phongBan, "Id", "name");
+            return View(user);
+        }
+
+        // POST: CT_PhongBan/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Id,hoten,UserName,PasswordHash")] User user, int id_phong)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if(user.hoten != null && user.PasswordHash != null)
+                    {
+                        var nguoidung = await _context.user.FindAsync(id);
+                        if (user.PasswordHash != null)
+                        {
+                            nguoidung.hoten = user.hoten;
+                            nguoidung.PasswordHash = HashPassword(user.PasswordHash);
+                        }
+                        var phong = await _context.CT_PhongBan.FirstOrDefaultAsync(x => x.Id_User == user.Id);
+                        if (phong != null)
+                        {
+                            phong.id_phongban = id_phong;
+                            _context.Update(phong);
+                        }
+                        else
+                        {
+                            phong = new CT_PhongBan();
+                            phong.id_phongban = id_phong;
+                            phong.Id_User = user.Id;
+                            _context.CT_PhongBan.Add(phong);
+                        }
+                        _context.Update(nguoidung);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        ViewData["id_phongban"] = new SelectList(_context.phongBan, "Id", "name");
+                        ViewBag.erro = "Vui lòng nhấp đầy đủ thông tin";
+                        return View(user);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    ViewBag.erro = "Lỗi trong quá trình lưu";
+
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["id_phongban"] = new SelectList(_context.phongBan, "Id", "name");
+            return View(user);
+        }
+
+        //Khởi tạo view
+        public async Task<IActionResult> EditThongtin(string Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.user.FindAsync(Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        //Hàm xử lý lưu thay đổi 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditThongtin(string id, [Bind("Id,hoten,UserName,PasswordHash")] User user, string confirmPass,string newpass)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if(user.PasswordHash != null && confirmPass !=null)
+                    {
+                        //Nhập mật khẩu mới và xác nhận mật khẩu trùng nhau
+                        if (confirmPass == newpass)
+                        {
+                            //nhap trùng new & confirm pass
+                            var nguoidung = await _context.user.FindAsync(id);
+                            if (nguoidung != null)
+                            {
+                                //thay đổi mật khẩu
+                                var result = await _userManager.ChangePasswordAsync(nguoidung, user.PasswordHash, newpass);
+                                if (result.Succeeded)
+                                {
+                                    return RedirectToAction(nameof(Index));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //sai
+                            ViewBag.erro = "Mật khẩu và mật khẩu xác nhận phải giống nhau";
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        //trống
+                        ViewBag.erro = "Phải nhập đầy đủ thông tin";
+                        return View(user);
+                    }
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["id_phongban"] = new SelectList(_context.phongBan, "Id", "name");
+            return View(user);
+        }
+
+        public static string HashPassword(string password)
+        {
+            byte[] salt;
+            byte[] buffer2;
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, 0x10, 0x3e8))
+            {
+                salt = bytes.Salt;
+                buffer2 = bytes.GetBytes(0x20);
+            }
+            byte[] dst = new byte[0x31];
+            Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
+            Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
+            return Convert.ToBase64String(dst);
         }
     }
 }

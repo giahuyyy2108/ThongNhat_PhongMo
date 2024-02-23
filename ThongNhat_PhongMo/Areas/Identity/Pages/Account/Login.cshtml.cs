@@ -139,9 +139,8 @@ namespace ThongNhat_PhongMo.Areas.Identity.Pages.Account
                         }
                     }
 
-
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("/ThongTinKhamBenhs/");
                 }
                 if (result.RequiresTwoFactor)
                 {

@@ -14,6 +14,7 @@ namespace ThongNhat_PhongMo.Models
 
         [Column(TypeName = "nvarchar")]
         [StringLength(50)]
+        [Required(ErrorMessage = "Phải nhập đầy đủ thông tin")]
         public string name { get; set; }
 
 
@@ -24,5 +25,9 @@ namespace ThongNhat_PhongMo.Models
         [JsonIgnore]
         [IgnoreDataMember]
         public ICollection<ThongTinKhamBenh> thongTinKhamBenh { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public ICollection<CT_PhongBan> phongban { get; set; }
     }
 }

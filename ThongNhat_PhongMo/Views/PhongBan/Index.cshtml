@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ThongNhat_PhongMo.Models.PhongBan>
+
+@{
+    ViewData["Title"] = "Phòng ban";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+
+<p>
+    <a asp-action="Create">Thêm mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên phòng mổ
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+           
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

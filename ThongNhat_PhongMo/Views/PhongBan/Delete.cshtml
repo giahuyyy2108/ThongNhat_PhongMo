@@ -1,0 +1,16 @@
+﻿@model ThongNhat_PhongMo.Models.PhongBan
+
+@{
+    ViewData["Title"] = "Xóa";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="col-md-12">
+    <h3>Bạn có chắc chắn muốn xóa @Html.DisplayFor(model => model.name) </h3>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Trờ về danh sách</a>
+    </form>
+</div>

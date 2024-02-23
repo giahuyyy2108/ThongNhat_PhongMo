@@ -1,0 +1,32 @@
+﻿@model ThongNhat_PhongMo.Models.CT_PhongBan
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+
+<div>
+    <h4>Xóa phân phòng người dùng</h4>
+    <hr />
+    <dl class="col-md-12">
+        <dt class = "col-md-3">
+            Người dùng
+        </dt>
+        <dd class = "col-md-9">
+            @Html.DisplayFor(model => model.user.UserName)
+        </dd class>
+        <dt class = "col-sm-3">
+            Phòng ban
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.phong.Id)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Trở về danh sách</a>
+    </form>
+</div>

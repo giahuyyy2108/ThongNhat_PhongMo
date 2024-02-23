@@ -28,6 +28,9 @@
                 Phái
             </th>
             <th>
+                Phòng
+            </th>
+            <th>
                 Tình trạng
             </th>
             
@@ -37,50 +40,53 @@
     <tbody>
 @{int stt= 1;}
 @foreach (var item in Model) {
-            if(item.id_tinhtrang < 5)
-            {
-                <tr>
+        if(item.id_tinhtrang < 5)
+        {
+            <tr>
                     
-                    <td>
-                        @stt
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.mabn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.hoten)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.namsinh)
-                    </td>
+                <td>
+                    @stt
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mabn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.hoten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.namsinh)
+                </td>
 
-                    @if (item.gt == 1)
-                    {
-                        <td>
-                            Nữ
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            Nam
-                        </td>
-                    }
+                @if (item.gt == 1)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => item.tinhtrang.Name)
+                        Nữ
                     </td>
+                }
+                else
+                {
                     <td>
-                        <div style="display:flex;">
-                            <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-primary btn-sm">Đổi phòng</a>
-                            <form asp-action="Update" asp-route-id="@item.id" style="margin:0 5px 0 5px">
-                                <button type="submit" class="= btn btn-success btn-sm">Cập nhật</button>
-                            </form>
-                            <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger btn-sm">Xóa</a>
-                        </div>
+                        Nam
                     </td>
-                </tr>
-                stt++;
-            }
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.phongban.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.tinhtrang.Name)
+                </td>
+                <td>
+                    <div style="display:flex;">
+                        <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-primary btn-sm">Đổi phòng</a>
+                        <form asp-action="Update" asp-route-id="@item.id" style="margin:0 5px 0 5px">
+                            <button type="submit" class="= btn btn-success btn-sm">Cập nhật</button>
+                        </form>
+                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger btn-sm">Xóa</a>
+                    </div>
+                </td>
+            </tr>
+            stt++;
+        }
 }
     </tbody>
 </table>

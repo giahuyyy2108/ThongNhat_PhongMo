@@ -39,5 +39,7 @@ namespace ThongNhat_PhongMo.Models
 
         public DbSet<User> user { get; set; }
 
+        public DbSet<ThongNhat_PhongMo.Models.CT_PhongBan> CT_PhongBan { get; set; }
+
     }
 }

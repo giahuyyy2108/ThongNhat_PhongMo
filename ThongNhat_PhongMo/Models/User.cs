@@ -12,11 +12,17 @@ namespace ThongNhat_PhongMo.Models
 {
     public class User : IdentityUser
     {
-
+        [Column(TypeName = "nvarchar")]
+        [StringLength(400)]
+        public string hoten { get; set; }
 
         [JsonIgnore]
         [IgnoreDataMember]
         public ICollection<ThongTinKhamBenh> benhnhan { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public ICollection<CT_PhongBan> phongban { get; set; }
 
     }
 }
